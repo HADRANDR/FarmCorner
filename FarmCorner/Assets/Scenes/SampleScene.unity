@@ -1310,14 +1310,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlanePrefab: {fileID: 3021885999442840780, guid: c14dc198de657014cbf17cec0cffe00b, type: 3}
   prefabList: []
-  _endPointLeft: {x: -100, y: 0, z: -40}
-  _endPointRight: {x: 100, y: 0, z: -40}
-  _centerPoint: {x: 0, y: 0, z: 0}
-  _rotationAmount: 90
-  _moveXAmount: 100
-  _moveZAmount: 40
-  _duration: 0.5
-  _FarmCount: 5
+  endPointLeft: {x: -100, y: 0, z: -40}
+  endPointRight: {x: 100, y: 0, z: -40}
+  centerPoint: {x: 0, y: 0, z: 0}
+  rotationAmount: 90
+  moveXAmount: 100
+  moveZAmount: 40
+  duration: 0.5
+  FarmCount: 3
+  farmType: 0
 --- !u!1 &694578109
 GameObject:
   m_ObjectHideFlags: 0

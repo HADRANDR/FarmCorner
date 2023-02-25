@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Joystick
+  - Chicken
+  - Duck
+  - Sheep
   layers:
   - Default
   - TransparentFX

@@ -1310,14 +1310,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlanePrefab: {fileID: 3021885999442840780, guid: c14dc198de657014cbf17cec0cffe00b, type: 3}
   prefabList: []
-  _endPointLeft: {x: -90, y: 0, z: -30}
-  _endPointRight: {x: 90, y: 0, z: -30}
+  _endPointLeft: {x: -100, y: 0, z: -40}
+  _endPointRight: {x: 100, y: 0, z: -40}
   _centerPoint: {x: 0, y: 0, z: 0}
   _rotationAmount: 90
-  _moveXAmount: 90
-  _moveZAmount: 30
-  _duration: 3
-  _FarmCount: 3
+  _moveXAmount: 100
+  _moveZAmount: 40
+  _duration: 0.5
+  _FarmCount: 5
 --- !u!1 &694578109
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,7 +1812,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 320
+  far clip plane: 400
   field of view: 80
   orthographic: 0
   orthographic size: 20
@@ -1838,15 +1838,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.30070576, y: 0, z: 0, w: 0.953717}
-  m_LocalPosition: {x: 0, y: 35, z: -39}
+  m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
+  m_LocalPosition: {x: 0, y: 50, z: -38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3760643963529102918}
   m_Father: {fileID: 1879150019}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 35, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: 0, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3272,7 +3272,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &1915019760
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3345,9 +3345,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1915019759}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.01, z: -28}
-  m_LocalScale: {x: 6000.001, y: 6, z: 6000.001}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: -0.01, z: 90}
+  m_LocalScale: {x: 30, y: 1.8, z: 30}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3

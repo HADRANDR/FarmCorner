@@ -2,50 +2,53 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-
 public class InGameManager : MonoBehaviour
 {
-    [SerializeField] GameObject PlanePrefab;
+    #region Variables
+    private Vector3 _firstPointX; // First touched point.
+    private Vector3 _stayPointX; // End touched point.
+    float _directionDifX; // First - End.
+    [SerializeField] GameObject PlanePrefab; 
     [SerializeField] private List<GameObject> prefabList = new List<GameObject>();
-
-    private Vector3 _firstPointX;
-    private Vector3 _stayPointX;
-    [SerializeField] Vector3 _endPointLeft, _endPointRight, _centerPoint;
-    float _directionDifX;
-
-    [SerializeField] float _rotationAmount = 90f;
-    [SerializeField] float _moveXAmount = 90f;
-    [SerializeField] float _moveZAmount = 30f;
-    [SerializeField] float _duration = 3f;
-
-    [SerializeField] int _FarmCount;
-    private float _targetRotation;
+    [SerializeField] Vector3 _endPointLeft, _endPointRight, _centerPoint; 
+    [SerializeField] float _rotationAmount; // Rotate Angle
+    [SerializeField] float _moveXAmount; // position X point count
+    [SerializeField] float _moveZAmount; // position Z point count
+    [SerializeField] float _duration; // animations countdown.
+    [SerializeField] int _FarmCount; // Farm number 
+    private float _targetRotation; 
     private float _targetMoveX;
     private float _targetMoveZ;
     private bool objectControl = false;
     private float _time;
-    private int _count = 0;
-    private void Awake()
+    private int _count; // List in
+    private int _tempCount; // List in before
+
+    #endregion
+
+    #region Functions
+
+    private void Awake() // Create farm plane
     {
         for (int i = 0; i < _FarmCount; i++)
         {
             GameObject prefab = Instantiate(PlanePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            prefab.transform.eulerAngles = new Vector3(0, 90, 0);
             prefabList.Add(prefab);
-            //prefabList[i].SetActive(false);
+            prefabList[i].SetActive(false);
+
         }
+        _count = 0;
+        prefabList[_count].transform.position = _centerPoint;
+        prefabList[_count].SetActive(true);
     }
-    void Start()
+    private void Update() // Touch enable timing
     {
-        //prefabList[0].SetActive(true);
-        //prefabList[0].transform.Translate(_endPointLeft);
-    }
-    private void Update()
-    {
-        if (objectControl ==true)
+        if (objectControl == true)
         {
             _time += Time.deltaTime;
         }
-        if (_time>3)
+        if (_time > _duration)
         {
             objectControl = false;
             _time = 0;
@@ -53,65 +56,132 @@ public class InGameManager : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (objectControl==false)
-        {          
+        if (objectControl == false)
+        {
             if (Input.GetMouseButtonDown(0))
-            {              
+            {
                 _firstPointX = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
             }
-            
             if (Input.GetMouseButtonUp(0))
             {
+
+                prefabList[_count].SetActive(true);
+
                 _stayPointX = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
 
                 _directionDifX = _firstPointX.x - _stayPointX.x;
 
-                if (_directionDifX < 0) // Ekran sağa doğru çekildi mi?
+                _tempCount = _count;
+
+                if (_directionDifX < 0) // screen swiped to the right?
                 {
+                    prefabList[_count].transform.position = _centerPoint;
                     PosAndRotUpdate();
-                    ScrollRight();
+                    ScrollRightFrontToBack();
                     RotateObjectWithTween(_targetRotation);
                     MoveObjectWithTween(_targetMoveX, _targetMoveZ);
-                    objectControl = true;
-                }
-                if (_directionDifX > 0) // Ekran sola doğru çekildi mi?
-                {
+
+                    _count++;
+                    CountUpade();
+
+                    prefabList[_count].transform.position = _endPointLeft;
+                    prefabList[_count].SetActive(true);
+                    RotateUpdateWithTween(0);
                     PosAndRotUpdate();
-                    ScrollLeft();
+                    ScrollRightBackToFront();
                     RotateObjectWithTween(_targetRotation);
                     MoveObjectWithTween(_targetMoveX, _targetMoveZ);
-                    objectControl = true;
+
+                    Invoke(nameof(ObjectFalse), _duration);
                 }
+                if (_directionDifX > 0) // screen swiped to the left?
+                {
+                    prefabList[_count].transform.position = _centerPoint;
+                    PosAndRotUpdate();
+                    ScrollLeftFrontToBack();
+                    RotateObjectWithTween(_targetRotation);
+                    MoveObjectWithTween(_targetMoveX, _targetMoveZ);
+
+                    _count--;
+                    CountUpade();
+
+                    prefabList[_count].transform.position = _endPointRight;
+                    prefabList[_count].SetActive(true);
+                    RotateUpdateWithTween(180);
+                    PosAndRotUpdate();
+                    ScrollLeftBackToFront();
+                    RotateObjectWithTween(_targetRotation);
+                    MoveObjectWithTween(_targetMoveX, _targetMoveZ);
+
+                    Invoke(nameof(ObjectFalse), _duration);
+                }
+                objectControl = true;
             }
-            _count += 1;
-        }           
-    }
-    void RotateObjectWithTween(float _target) // Objein rotasyon hareket algoritması.
+        }
+
+    } // Farm Plane moving algorithm
+    void RotateObjectWithTween(float _target) // Object rotation algorithm
     {
-        prefabList[0].gameObject.transform.DORotate(new Vector3(prefabList[0].gameObject.transform.rotation.eulerAngles.x, _target, prefabList[0].gameObject.transform.rotation.eulerAngles.z), _duration);
+        prefabList[_count].transform.DORotate(new Vector3(prefabList[_count].transform.rotation.eulerAngles.x, _target, prefabList[_count].transform.rotation.eulerAngles.z), _duration);
     }
-    void MoveObjectWithTween(float _targetX, float _targetZ) // Objenin pozisyon hareket algoritmas.
+    void RotateUpdateWithTween(float rotate) // Starting angle of next object
     {
-        prefabList[0].gameObject.transform.DOMoveX(_targetX, _duration);
-        prefabList[0].gameObject.transform.DOMoveZ(_targetZ, _duration);
+        prefabList[_count].transform.eulerAngles = new Vector3(0, rotate, 0);
     }
-    void PosAndRotUpdate() // Obje koordinat bilgilerini her kaydırma öncesi gerekli değişkende günceller.
+    void MoveObjectWithTween(float _targetX, float _targetZ) // Object position algorithm
     {
-        _targetRotation = prefabList[0].gameObject.transform.rotation.eulerAngles.y;
-        _targetMoveX = prefabList[0].gameObject.transform.position.x;
-        _targetMoveZ = prefabList[0].gameObject.transform.position.z;
+        prefabList[_count].transform.DOMoveX(_targetX, _duration);
+        prefabList[_count].transform.DOMoveZ(_targetZ, _duration);
     }
-    void ScrollRight() // Objenin hareket edeceği yöne dair koordinat güncellemesi.
+    void PosAndRotUpdate() // Assigns the coordinate points of the object to the variables.
+    {
+        _targetRotation = prefabList[_count].transform.rotation.eulerAngles.y;
+        _targetMoveX = prefabList[_count].transform.position.x;
+        _targetMoveZ = prefabList[_count].transform.position.z;
+    }
+
+    #region ScrollPlaneAlgorithm
+    void ScrollRightFrontToBack()
     {
         _targetRotation += _rotationAmount;
         _targetMoveX += _moveXAmount;
         _targetMoveZ -= _moveZAmount;
     }
-    void ScrollLeft() // Objenin hareket edeceği yöne dair koordinat güncellemesi.
+    void ScrollRightBackToFront()
+    {
+        _targetRotation += _rotationAmount;
+        _targetMoveX += _moveXAmount;
+        _targetMoveZ += _moveZAmount;
+    }
+    void ScrollLeftFrontToBack()
     {
         _targetRotation -= _rotationAmount;
         _targetMoveX -= _moveXAmount;
         _targetMoveZ -= _moveZAmount;
     }
-    
+    void ScrollLeftBackToFront()
+    {
+        _targetRotation -= _rotationAmount;
+        _targetMoveX -= _moveXAmount;
+        _targetMoveZ += _moveZAmount;
+    }
+    #endregion
+
+    void ObjectFalse() // Object Set False
+    {
+        prefabList[_tempCount].SetActive(false);
+    }
+    void CountUpade() // List in count Update
+    {
+        if (_count < 0)
+        {
+            _count = prefabList.Count - 1;
+        }
+        if (_count == prefabList.Count)
+        {
+            _count = 0;
+        }
+    }
+    #endregion
+
 }

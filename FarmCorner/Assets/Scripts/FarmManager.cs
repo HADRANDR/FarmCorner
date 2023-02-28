@@ -5,16 +5,20 @@ using UnityEngine;
 public class FarmManager : MonoBehaviour
 {
     private enum FarmType { Chicken = 0, Duck = 1, Sheep = 2, Cow = 3 }
-    [SerializeField] private FarmType farmType;
-    // Start is called before the first frame update
-    void Start()
-    {
-        Debug.Log(farmType);
-    }
+    [SerializeField] private FarmType farmType; 
+    [SerializeField] private Pool pool;
 
-    // Update is called once per frame
-    void Update()
+    private List<AnimalManager> animals = new();
+
+
+
+    public void BuyAnimal()
     {
-        
+        AnimalManager animal = pool.GetPooledObject();
+
+        animals.Add(animal);
+
+        animal.gameObject.transform.position = transform.position;
+        animal.gameObject.SetActive(true);
     }
 }

@@ -77,7 +77,7 @@ public class InGameManager : MonoBehaviour
                 RotateObjectWithTween(_targetRotation);
                 MoveObjectWithTween(_targetMoveX, _targetMoveZ);
                 prefabList[_count].gameObject.SetActive(true);
-                Invoke(nameof(ObjectFalse), duration);
+                //Invoke(nameof(ObjectFalse), duration);
                 objectControl = true;
             }
         }

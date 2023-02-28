@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public class AnimalManager : MonoBehaviour
 {
+    
     private NavMeshAgent _agent;
 
     void Awake()
@@ -13,7 +14,7 @@ public class AnimalManager : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating(nameof(SetRandomDestination), 0f, 0.01f);
+            InvokeRepeating(nameof(SetRandomDestination), 0f, 0.01f);       
     }
 
     private void SetRandomDestination()
@@ -37,9 +38,9 @@ public class AnimalManager : MonoBehaviour
     }
     private Vector3 GetRandomPoint()
     {
-        var pointX = Random.Range(-7.3f, 5.7f);
-        var pointZ = Random.Range(-15f, 6f);
-        return new Vector3( pointX, 0, pointZ);
+        var pointX = Random.Range(-1.1f, 1.1f);
+        var pointZ = Random.Range(-1.8f, 1.8f);
+        return new Vector3(transform.position.x + pointX, 0, transform.position.z +pointZ);
 
     }
 }

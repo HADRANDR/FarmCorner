@@ -12,8 +12,10 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public UnityEvent LevelFail = new();
     [HideInInspector] public UnityEvent OnMoneyChange = new();
 
+    [HideInInspector] public UnityEvent<int> OnOpenNewFarm = new();
     [HideInInspector] public UnityEvent<AnimalManager> ReturnChickenPool = new();
     [HideInInspector] public UnityEvent<AnimalManager> ReturnDuckPool = new();
+    [HideInInspector] public UnityEvent<AnimalManager> ReturnSheepPool = new();
 
     private float playerMoney;
     public float PlayerMoney

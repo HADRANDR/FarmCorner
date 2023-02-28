@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PoolObject : MonoBehaviour
 {
-    private enum Pools {ChickenPool = 0, DuckPool = 1 }
+    private enum Pools {ChickenPool = 0, DuckPool = 1, SheepPool = 2 }
     [SerializeField] private Pools pools;
     [SerializeField] private AnimalManager animalManager;
 
@@ -21,6 +21,9 @@ public class PoolObject : MonoBehaviour
                 break;
             case 1:
                 GameManager.Instance.ReturnDuckPool.Invoke(animalManager);
+                break;
+            case 2:
+                GameManager.Instance.ReturnSheepPool.Invoke(animalManager);
                 break;
         }
 

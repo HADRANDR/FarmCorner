@@ -12,6 +12,13 @@ public class UIController : MonoBehaviour
     [SerializeField] private List<string> moneyMulti = new();
     [SerializeField] private GameObject coin, money;
 
+    [Header("Upgrade Panels")]   
+    [SerializeField] private GameObject chickenPanel;
+    [SerializeField] private GameObject duckPanel;
+    [SerializeField] private GameObject sheepPanel;
+    //[SerializeField] private GameObject buyButton;
+    //[SerializeField] private TextMeshProUGUI buyButtonText;
+
     private Canvas UICanvas;
 
     private Button Next, Restart;
@@ -29,6 +36,7 @@ public class UIController : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.OnMoneyChange.Invoke();
+        
     }
 
     void ScriptInitialize()
@@ -101,6 +109,8 @@ public class UIController : MonoBehaviour
         GameManager.Instance.LevelSuccess.AddListener(() => ShowPanel(WinPanel, true));
         GameManager.Instance.GameReady.AddListener(GameReady);
         GameManager.Instance.OnMoneyChange.AddListener(SetMoneyText);
+
+        GameManager.Instance.OnOpenNewFarm.AddListener(OpenUpgradePanel);
     }
 
     private void OnDisable()
@@ -110,11 +120,41 @@ public class UIController : MonoBehaviour
             GameManager.Instance.LevelFail.RemoveListener(() => ShowPanel(LosePanel, true));
             GameManager.Instance.LevelSuccess.RemoveListener(() => ShowPanel(WinPanel, true));
             GameManager.Instance.GameReady.RemoveListener(GameReady);
+
+            GameManager.Instance.OnOpenNewFarm.RemoveListener(OpenUpgradePanel);
         }
     }
 
     void ShowTutorial()
     {
         TutorialPanel.transform.GetChild(settings.GetTutorialIndex()).gameObject.SetActive(true);
+    }
+
+    void CloseAllUpgradePanel()
+    {
+        chickenPanel.SetActive(false);
+        duckPanel.SetActive(false);
+        sheepPanel.SetActive(false);
+    }
+    void OpenUpgradePanel(int index)
+    {
+        CloseAllUpgradePanel();
+
+        switch (index)
+        {
+            case 0:
+                chickenPanel.SetActive(true);
+                //buyButtonText.text = ("Buy Chicken");
+                break;
+            case 1:
+                duckPanel.SetActive(true);
+                //buyButtonText.text = ("Buy Duck");
+                break;
+            case 2:
+                sheepPanel.SetActive(true);
+                //buyButtonText.text = ("Buy Sheep");
+                break;
+
+        }
     }
 }

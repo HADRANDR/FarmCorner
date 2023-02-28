@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Pool : MonoBehaviour
 {
-    private enum Pools { ChickenPool = 0, DuckPool = 1}
+    private enum Pools { ChickenPool = 0, DuckPool = 1, SheepPool = 2 }
     [SerializeField] private Pools pools;
 
     private Queue<AnimalManager> poolObject = new();
@@ -26,6 +26,11 @@ public class Pool : MonoBehaviour
             case 1:
                 GameManager.Instance.ReturnDuckPool.AddListener(ReturnPool);
                 break;
+            case 2:
+                GameManager.Instance.ReturnSheepPool.AddListener(ReturnPool);
+                break;
+
+
         }
 
     }

@@ -6,15 +6,25 @@ public class AnimalManager : MonoBehaviour
 {
     
     private NavMeshAgent _agent;
+    float duration = InGameManager._staticDuration;
+    bool start = true;
 
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+
     }
 
-    private void Start()
+    private void OnEnable()
     {
-            InvokeRepeating(nameof(SetRandomDestination), 0f, 0.01f);       
+        if (start==true)
+        {
+            StartAnimal();
+            start = false;
+        }
+        else OpenAnimal();
+
+
     }
 
     private void SetRandomDestination()
@@ -41,6 +51,30 @@ public class AnimalManager : MonoBehaviour
         var pointX = Random.Range(-1.1f, 1.1f);
         var pointZ = Random.Range(-1.8f, 1.8f);
         return new Vector3(transform.position.x + pointX, 0, transform.position.z +pointZ);
+    }
 
+    private void StartAnimal()
+    {
+        _agent.enabled = true;
+        _agent.isStopped = false;
+        InvokeRepeating(nameof(SetRandomDestination), 0f, 0.01f);
+    }
+    private void OpenAnimal()
+    {      
+        
+        Invoke(nameof(SetRandomDestinationInvokeRepating), InGameManager._staticDuration);
+    }
+    public void CloseAnimal()
+    {
+        CancelInvoke(nameof(Check));
+        CancelInvoke(nameof(SetRandomDestination));
+        _agent.isStopped = true;
+        _agent.enabled = false;
+    }
+    private void SetRandomDestinationInvokeRepating()
+    {
+        _agent.enabled = true;
+        _agent.isStopped = false;
+        InvokeRepeating(nameof(SetRandomDestination), 0f, 0.01f);
     }
 }

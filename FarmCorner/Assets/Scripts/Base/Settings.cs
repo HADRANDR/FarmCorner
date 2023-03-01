@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Settings : MonoBehaviour
 {
-    private enum Tutorial { HorizontalSwerve = 0, JoystickSwerve = 1, Drag = 2 }
+    private enum Tutorial { None = 0, HorizontalSwerve = 1, JoystickSwerve = 2, Drag = 3 }
     [SerializeField] private Tutorial tutorial;
 
     [Range(60, 120)]

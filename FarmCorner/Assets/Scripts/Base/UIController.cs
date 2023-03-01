@@ -7,7 +7,7 @@ using DG.Tweening;
 
 public class UIController : MonoBehaviour
 {
-    [SerializeField] private GameObject WinPanel, LosePanel, InGamePanel, TutorialPanel;
+    [SerializeField] private GameObject WinPanel, LosePanel, InGamePanel;
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private List<string> moneyMulti = new();
     [SerializeField] private GameObject coin, money;
@@ -72,7 +72,6 @@ public class UIController : MonoBehaviour
         WinPanel.SetActive(false);
         LosePanel.SetActive(false);
         InGamePanel.SetActive(true);
-        ShowTutorial();
     }
 
     void SetMoneyText()
@@ -123,11 +122,6 @@ public class UIController : MonoBehaviour
 
             GameManager.Instance.OnOpenNewFarm.RemoveListener(OpenUpgradePanel);
         }
-    }
-
-    void ShowTutorial()
-    {
-        TutorialPanel.transform.GetChild(settings.GetTutorialIndex()).gameObject.SetActive(true);
     }
 
     void CloseAllUpgradePanel()

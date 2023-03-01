@@ -8,19 +8,23 @@ public class InGameManager : MonoBehaviour
     #region Variables
     //int _textCount = 0;
     FarmManager farmManager;
-    private Vector3 _firstPointX, _stayPointX; // First touched point. // End touched point.
+    
     [SerializeField] GameObject[] ButtonObjects;
     [SerializeField] private List<FarmManager> prefabList = new();
     [SerializeField] Vector3 endPointLeft, endPointRight, centerPoint; 
     [SerializeField] float rotationAmount, moveXAmount, moveZAmount, duration; // Rotate Angle // position X point count // position Z point count // animations countdown.
-    private float _targetRotation, _targetMoveX, _targetMoveZ, _time;   
+    public static float _staticDuration;
+
+    private Vector3 _startPos;
+    private float _targetRotation, _targetMoveX, _targetMoveZ;
     private int _count, _tempCount; // List in
-    private bool objectControl = false;
+    private bool canDrag = true;
     
     #endregion
     #region Functions
     private void Awake() // Create farm plane
-    {    
+    {
+        _staticDuration = duration;
         _count = 0;
         prefabList[_count].gameObject.transform.position = centerPoint;
         prefabList[_count].gameObject.SetActive(true);
@@ -46,69 +50,64 @@ public class InGameManager : MonoBehaviour
     //}
     void Update()
     {
-        if (objectControl == true) // Touch Enabled timing
-        {
-            _time += Time.deltaTime;
-        }
-        if (_time > duration)
-        {
-            objectControl = false;
-            _time = 0;
-        }
+        if (!canDrag) return;
+        
 
-        if (objectControl == false)
+        if (Input.GetMouseButtonDown(0) /*&& EventSystem.current.currentSelectedGameObject != ButtonObjects[_textCount]*/)
         {
-            Debug.Log(_count);
-            
-             // First - End.
-            if (Input.GetMouseButtonDown(0) /*&& EventSystem.current.currentSelectedGameObject != ButtonObjects[_textCount]*/)
+            _startPos = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
+        }
+        if (Input.GetMouseButtonUp(0) /*&& EventSystem.current.currentSelectedGameObject != ButtonObjects[_textCount]*/)
+        {
+            var endPoint = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
+            var _directionDifX = _startPos.x - endPoint.x;
+
+            prefabList[_count].transform.position = centerPoint;
+
+            if (_directionDifX <= -0.25f) // screen swiped to the right?
             {
-                _firstPointX = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));               
-            }
-            if (Input.GetMouseButtonUp(0) /*&& EventSystem.current.currentSelectedGameObject != ButtonObjects[_textCount]*/)
-            {
-                float _directionDifX;
-                _stayPointX = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
-                _directionDifX = _firstPointX.x - _stayPointX.x;
-                Debug.Log(_directionDifX);               
-                prefabList[_count].transform.position = centerPoint;
+                StartCoroutine(CooldownAsync(duration * 1.1f));
+                
                 PosAndRotUpdate();
-                if (_directionDifX <= -0.25f) // screen swiped to the right?
-                {
-                    objectControl = true;
-                    ScrollRightFrontToBack();
-                    RotateObjectWithTween(_targetRotation);
-                    MoveObjectWithTween(_targetMoveX, _targetMoveZ);
-                    _tempCount = _count;
-                    _count++;
-                    CountUpade();
-                    prefabList[_count].transform.position = endPointLeft;                   
-                    RotateUpdateWithTween(-90);
-                    PosAndRotUpdate();
-                    ScrollRightBackToFront();
-                }
-                if (_directionDifX >= 0.25f) // screen swiped to the left?
-                {
-                    objectControl = true;
-                    ScrollLeftFrontToBack();
-                    RotateObjectWithTween(_targetRotation);
-                    MoveObjectWithTween(_targetMoveX, _targetMoveZ);
-                    _tempCount = _count;
-                    _count--;
-                    CountUpade();
-                    prefabList[_count].transform.position = endPointRight;
-                    RotateUpdateWithTween(90);
-                    PosAndRotUpdate();
-                    ScrollLeftBackToFront();                  
-                }
-                _directionDifX = 0;
-                Invoke(nameof(ObjectFalse), duration);             
-                prefabList[_count].gameObject.SetActive(true);               
+                ScrollRightFrontToBack();
                 RotateObjectWithTween(_targetRotation);
                 MoveObjectWithTween(_targetMoveX, _targetMoveZ);
-                
-                
+                _tempCount = _count;
+                _count++;
+                CountUpade();
+                prefabList[_count].transform.position = endPointLeft;
+                RotateUpdateWithTween(-90);
+                PosAndRotUpdate();
+                ScrollRightBackToFront();
+                AnimalStop();
+                Invoke(nameof(ObjectFalse), duration);
+                prefabList[_count].gameObject.SetActive(true);
+                RotateObjectWithTween(_targetRotation);
+                MoveObjectWithTween(_targetMoveX, _targetMoveZ);
             }
+            else if (_directionDifX >= 0.25f) // screen swiped to the left?
+            {
+                StartCoroutine(CooldownAsync(duration * 1.1f));
+
+                PosAndRotUpdate();
+                ScrollLeftFrontToBack();
+                RotateObjectWithTween(_targetRotation);
+                MoveObjectWithTween(_targetMoveX, _targetMoveZ);
+                _tempCount = _count;
+                _count--;
+                CountUpade();
+                prefabList[_count].transform.position = endPointRight;
+                RotateUpdateWithTween(90);
+                PosAndRotUpdate();
+                ScrollLeftBackToFront();
+                AnimalStop();
+                Invoke(nameof(ObjectFalse), duration);
+                prefabList[_count].gameObject.SetActive(true);
+                RotateObjectWithTween(_targetRotation);
+                MoveObjectWithTween(_targetMoveX, _targetMoveZ);
+            }
+
+
         }
     }
     void RotateObjectWithTween(float _target) // Object rotation algorithm
@@ -157,9 +156,13 @@ public class InGameManager : MonoBehaviour
     }
     #endregion
 
+    void AnimalStop()
+    {
+        prefabList[_tempCount].StopAnimal();
+    }
     void ObjectFalse() // Object Set False
     {
-        prefabList[_tempCount].gameObject.SetActive(false);
+        prefabList[_tempCount].CloseFarm();
     }
     void CountUpade() // List in count Update
     {
@@ -171,6 +174,12 @@ public class InGameManager : MonoBehaviour
         {
             _count = 0;
         }
+    }
+    private IEnumerator CooldownAsync(float time)
+    {
+        canDrag = false;
+        yield return new WaitForSeconds(time);
+        canDrag = true;
     }
     #endregion
 

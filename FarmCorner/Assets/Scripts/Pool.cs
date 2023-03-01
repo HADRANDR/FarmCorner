@@ -54,6 +54,7 @@ public class Pool : MonoBehaviour
 
     private void ReturnPool(AnimalManager obj)
     {
+        obj.enabled = false;
         obj.gameObject.SetActive(false);
         poolObject.Enqueue(obj);
     }

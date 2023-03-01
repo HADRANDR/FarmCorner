@@ -16,13 +16,26 @@ public class FarmManager : MonoBehaviour
         GameManager.Instance.OnOpenNewFarm.Invoke((int)farmType);
     }
 
-    //public void BuyAnimal()
-    //{
-    //    AnimalManager animal = pool.GetPooledObject();
+    public void BuyAnimal()
+    {
+        AnimalManager animal = pool.GetPooledObject();
 
-    //    animals.Add(animal);
+        animals.Add(animal);
 
-    //    animal.gameObject.transform.position = transform.position;
-    //    animal.gameObject.SetActive(true);       
-    //}
+        animal.gameObject.transform.position = transform.position;
+        animal.enabled = true;
+        animal.gameObject.SetActive(true);
+    }
+
+    public void CloseFarm()
+    {
+        gameObject.SetActive(false);
+    }
+    public void StopAnimal()
+    {
+        foreach (var animal in animals)
+        {
+            animal.CloseAnimal();
+        }
+    }
 }

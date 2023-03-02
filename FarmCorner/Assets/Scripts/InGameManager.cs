@@ -11,9 +11,15 @@ public class InGameManager : MonoBehaviour
     
     [SerializeField] GameObject[] ButtonObjects;
     [SerializeField] private List<FarmManager> prefabList = new();
-    [SerializeField] Vector3 endPointLeft, endPointRight, centerPoint; 
-    [SerializeField] float rotationAmount, moveXAmount, moveZAmount, duration; // Rotate Angle // position X point count // position Z point count // animations countdown.
+    
+    
     public static float _staticDuration;
+
+    [Header("Farm Transform Controls")]
+    [SerializeField] Vector3 endPointLeft;
+    [SerializeField] Vector3 endPointRight;
+    [SerializeField] Vector3 centerPoint;
+    [SerializeField] float rotationAmount, moveXAmount, moveZAmount, duration; // Rotate Angle // position X point count // position Z point count // animations countdown.
 
     private Vector3 _startPos;
     private float _targetRotation, _targetMoveX, _targetMoveZ;
@@ -29,25 +35,6 @@ public class InGameManager : MonoBehaviour
         prefabList[_count].gameObject.transform.position = centerPoint;
         prefabList[_count].gameObject.SetActive(true);
     }
-    //private void OnEnable()
-    //{
-    //    GameManager.Instance.OnOpenNewFarm.AddListener(UpdateBuyText);
-    //}
-    //void UpdateBuyText(int index)
-    //{
-    //    switch (index)
-    //    {
-    //        case 0:
-    //            _textCount = 0;
-    //            break;
-    //        case 1:
-    //            _textCount = 1;
-    //            break;
-    //        case 2:
-    //            _textCount = 2;
-    //            break;
-    //    }
-    //}
     void Update()
     {
         if (!canDrag) return;
@@ -60,13 +47,11 @@ public class InGameManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0) /*&& EventSystem.current.currentSelectedGameObject != ButtonObjects[_textCount]*/)
         {
             var endPoint = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
-            var _directionDifX = _startPos.x - endPoint.x;
-
-            prefabList[_count].transform.position = centerPoint;
+            float _directionDifX = _startPos.x - endPoint.x;
 
             if (_directionDifX <= -0.25f) // screen swiped to the right?
             {
-                StartCoroutine(CooldownAsync(duration * 1.1f));
+                StartCoroutine(CooldownAsync(duration * 1.2f));
                 
                 PosAndRotUpdate();
                 ScrollRightFrontToBack();
@@ -87,7 +72,7 @@ public class InGameManager : MonoBehaviour
             }
             else if (_directionDifX >= 0.25f) // screen swiped to the left?
             {
-                StartCoroutine(CooldownAsync(duration * 1.1f));
+                StartCoroutine(CooldownAsync(duration * 1.2f));
 
                 PosAndRotUpdate();
                 ScrollLeftFrontToBack();
@@ -106,8 +91,6 @@ public class InGameManager : MonoBehaviour
                 RotateObjectWithTween(_targetRotation);
                 MoveObjectWithTween(_targetMoveX, _targetMoveZ);
             }
-
-
         }
     }
     void RotateObjectWithTween(float _target) // Object rotation algorithm

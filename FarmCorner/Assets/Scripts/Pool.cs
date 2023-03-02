@@ -8,12 +8,14 @@ public class Pool : MonoBehaviour
 
     private Queue<AnimalManager> poolObject = new();
 
-    [SerializeField] private int poolSize = 25;
+    [SerializeField] private int poolSize = 40;
+    public static int _poolLength;
     [SerializeField] private AnimalManager poolGameObject;
 
     private void Awake()
     {
         FillPool();
+        _poolLength = poolSize;
     }
 
     private void Start()
@@ -29,8 +31,6 @@ public class Pool : MonoBehaviour
             case 2:
                 GameManager.Instance.ReturnSheepPool.AddListener(ReturnPool);
                 break;
-
-
         }
 
     }
@@ -52,7 +52,7 @@ public class Pool : MonoBehaviour
         }
     }
 
-    private void ReturnPool(AnimalManager obj)
+    public void ReturnPool(AnimalManager obj)
     {
         obj.enabled = false;
         obj.gameObject.SetActive(false);

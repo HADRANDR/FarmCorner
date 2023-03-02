@@ -6,7 +6,6 @@ public class AnimalManager : MonoBehaviour
 {
     
     private NavMeshAgent _agent;
-    float duration = InGameManager._staticDuration;
     bool start = true;
 
     void Awake()

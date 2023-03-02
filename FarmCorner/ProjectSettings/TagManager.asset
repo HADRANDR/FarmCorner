@@ -9,6 +9,9 @@ TagManager:
   - Duck
   - Sheep
   - Pool
+  - Merge1
+  - Merge2
+  - Merge3
   layers:
   - Default
   - TransparentFX

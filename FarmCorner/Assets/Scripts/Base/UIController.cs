@@ -12,7 +12,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private List<string> moneyMulti = new();
     [SerializeField] private GameObject coin, money;
 
-    [Header("Upgrade Panels")]   
+    [Header("Upgrade Panels")]
     [SerializeField] private GameObject chickenPanel;
     [SerializeField] private GameObject duckPanel;
     [SerializeField] private GameObject sheepPanel;
@@ -26,6 +26,7 @@ public class UIController : MonoBehaviour
     private LevelManager levelManager;
 
     private Settings settings;
+    FarmManager farmManager;
 
     private void Awake()
     {
@@ -36,7 +37,7 @@ public class UIController : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.OnMoneyChange.Invoke();
-        
+
     }
 
     void ScriptInitialize()
@@ -130,25 +131,85 @@ public class UIController : MonoBehaviour
         duckPanel.SetActive(false);
         sheepPanel.SetActive(false);
     }
+    int _indexTemp = 0;
+    bool firstControl = true;
     void OpenUpgradePanel(int index)
     {
+        
         CloseAllUpgradePanel();
 
         switch (index)
         {
             case 0:
+                _indexTemp = 0;
                 chickenPanel.SetActive(true);
-                //buyButtonText.text = ("Buy Chicken");
+                OffInteractableButton();
+                if (firstControl == true)
+                {
+                    OnInteractableButton();
+                    firstControl = false;
+                }
+                else
+                {
+                    Invoke(nameof(OnInteractableButton), InGameManager._staticDuration);
+                }               
                 break;
             case 1:
+                _indexTemp = 1;
                 duckPanel.SetActive(true);
-                //buyButtonText.text = ("Buy Duck");
+                OffInteractableButton();
+                Invoke(nameof(OnInteractableButton), InGameManager._staticDuration);
                 break;
             case 2:
+                _indexTemp = 2;
                 sheepPanel.SetActive(true);
-                //buyButtonText.text = ("Buy Sheep");
+                OffInteractableButton();
+                Invoke(nameof(OnInteractableButton), InGameManager._staticDuration);
                 break;
-
+        }
+    }
+    void OnInteractableButton()
+    {
+        if (_indexTemp == 0)
+        {
+            chickenPanel.transform.GetChild(0).GetComponent<Button>().interactable = true;
+            chickenPanel.transform.GetChild(1).GetComponent<Button>().interactable = true;
+            chickenPanel.transform.GetChild(2).GetComponent<Button>().interactable = true;
+        }
+        else if (_indexTemp == 1)
+        {
+            duckPanel.transform.GetChild(0).GetComponent<Button>().interactable = true;
+            duckPanel.transform.GetChild(1).GetComponent<Button>().interactable = true;
+            duckPanel.transform.GetChild(2).GetComponent<Button>().interactable = true;
+        }
+        else if (_indexTemp == 2)
+        {
+            sheepPanel.transform.GetChild(0).GetComponent<Button>().interactable = true;
+            sheepPanel.transform.GetChild(1).GetComponent<Button>().interactable = true;
+            sheepPanel.transform.GetChild(2).GetComponent<Button>().interactable = true;
+            sheepPanel.transform.GetChild(3).GetComponent<Button>().interactable = true;
+        }            
+    }
+    void OffInteractableButton()
+    {
+        if (_indexTemp == 0)
+        {
+            chickenPanel.transform.GetChild(0).GetComponent<Button>().interactable = false;
+            chickenPanel.transform.GetChild(1).GetComponent<Button>().interactable = false;
+            chickenPanel.transform.GetChild(2).GetComponent<Button>().interactable = false;
+        }
+        else if (_indexTemp == 1)
+        {
+            duckPanel.transform.GetChild(0).GetComponent<Button>().interactable = false;
+            duckPanel.transform.GetChild(1).GetComponent<Button>().interactable = false;
+            duckPanel.transform.GetChild(2).GetComponent<Button>().interactable = false;
+        }
+        else if (_indexTemp == 2)
+        {
+            sheepPanel.transform.GetChild(0).GetComponent<Button>().interactable = false;
+            sheepPanel.transform.GetChild(1).GetComponent<Button>().interactable = false;
+            sheepPanel.transform.GetChild(2).GetComponent<Button>().interactable = false;
+            sheepPanel.transform.GetChild(3).GetComponent<Button>().interactable = false;
         }
     }
 }

@@ -12,6 +12,9 @@ TagManager:
   - Merge1
   - Merge2
   - Merge3
+  - Skin1
+  - Skin2
+  - Skin3
   layers:
   - Default
   - TransparentFX

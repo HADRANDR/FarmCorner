@@ -6,26 +6,21 @@ public class AnimalManager : MonoBehaviour
 {
     
     private NavMeshAgent _agent;
-    bool start = true;
+    public static bool start = true;
 
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-
     }
-
     private void OnEnable()
     {
-        if (start==true)
+        if (start==true || FarmManager.canBuy==true)
         {
             StartAnimal();
             start = false;
         }
         else OpenAnimal();
-
-
     }
-
     private void SetRandomDestination()
     {
         _agent.SetDestination(GetRandomPoint());
@@ -51,16 +46,14 @@ public class AnimalManager : MonoBehaviour
         var pointZ = Random.Range(-1.8f, 1.8f);
         return new Vector3(transform.position.x + pointX, 0, transform.position.z +pointZ);
     }
-
-    private void StartAnimal()
+    public void StartAnimal()
     {
         _agent.enabled = true;
         _agent.isStopped = false;
         InvokeRepeating(nameof(SetRandomDestination), 0f, 0.01f);
     }
     private void OpenAnimal()
-    {      
-        
+    {             
         Invoke(nameof(SetRandomDestinationInvokeRepating), InGameManager._staticDuration);
     }
     public void CloseAnimal()

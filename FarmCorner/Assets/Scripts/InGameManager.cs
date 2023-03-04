@@ -6,26 +6,23 @@ using UnityEngine.EventSystems;
 public class InGameManager : MonoBehaviour
 {
     #region Variables
-    //int _textCount = 0;
     FarmManager farmManager;
     
-    [SerializeField] GameObject[] ButtonObjects;
-    [SerializeField] private List<FarmManager> prefabList = new();
-    
-    
-    public static float _staticDuration;
+    [SerializeField] private List<FarmManager> prefabList = new();      
 
     [Header("Farm Transform Controls")]
     [SerializeField] Vector3 endPointLeft;
     [SerializeField] Vector3 endPointRight;
     [SerializeField] Vector3 centerPoint;
-    [SerializeField] float rotationAmount, moveXAmount, moveZAmount, duration; // Rotate Angle // position X point count // position Z point count // animations countdown.
-
-    private Vector3 _startPos;
-    private float _targetRotation, _targetMoveX, _targetMoveZ;
+    [SerializeField] float rotationAmount, moveXAmount, moveZAmount, duration, distance; // Rotate Angle // position X point count // position Z point count // animations countdown.
+    [SerializeField] float SheepSkinPhase1, SheepSkinPhase2;
+    public static float _sheepSkinPhase1, _sheepSkinPhase2;
+    public static float _staticDuration;
+    private Vector2 _startPoint, _endPoint, directionDifX;
+    private float _targetRotation, _targetMoveX, _targetMoveZ, _directionDifX;
     private int _count, _tempCount; // List in
     private bool canDrag = true;
-    
+
     #endregion
     #region Functions
     private void Awake() // Create farm plane
@@ -36,23 +33,20 @@ public class InGameManager : MonoBehaviour
         prefabList[_count].gameObject.SetActive(true);
     }
     void Update()
-    {
-        if (!canDrag) return;
-        
-
+    {     
         if (Input.GetMouseButtonDown(0) /*&& EventSystem.current.currentSelectedGameObject != ButtonObjects[_textCount]*/)
         {
-            _startPos = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
+            _startPoint = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
         }
         if (Input.GetMouseButtonUp(0) /*&& EventSystem.current.currentSelectedGameObject != ButtonObjects[_textCount]*/)
         {
-            var endPoint = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
-            float _directionDifX = _startPos.x - endPoint.x;
-
+            _endPoint = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
+            _directionDifX = _startPoint.x - _endPoint.x;
+            //Debug.Log(_startPoint.x + "||||" + _endPoint.x + "||||" + _directionDifX );
+            if (!canDrag) return;
             if (_directionDifX <= -0.25f) // screen swiped to the right?
             {
-                StartCoroutine(CooldownAsync(duration * 1.2f));
-                
+                StartCoroutine(CooldownAsync(duration));
                 PosAndRotUpdate();
                 ScrollRightFrontToBack();
                 RotateObjectWithTween(_targetRotation);
@@ -72,8 +66,7 @@ public class InGameManager : MonoBehaviour
             }
             else if (_directionDifX >= 0.25f) // screen swiped to the left?
             {
-                StartCoroutine(CooldownAsync(duration * 1.2f));
-
+                StartCoroutine(CooldownAsync(duration));
                 PosAndRotUpdate();
                 ScrollLeftFrontToBack();
                 RotateObjectWithTween(_targetRotation);
@@ -92,7 +85,8 @@ public class InGameManager : MonoBehaviour
                 MoveObjectWithTween(_targetMoveX, _targetMoveZ);
             }
         }
-    }
+    }   
+
     void RotateObjectWithTween(float _target) // Object rotation algorithm
     {
         prefabList[_count].transform.DORotate(new Vector3(prefabList[_count].transform.rotation.eulerAngles.x, _target, prefabList[_count].transform.rotation.eulerAngles.z), duration);
@@ -159,7 +153,7 @@ public class InGameManager : MonoBehaviour
         }
     }
     private IEnumerator CooldownAsync(float time)
-    {
+    {       
         canDrag = false;
         yield return new WaitForSeconds(time);
         canDrag = true;

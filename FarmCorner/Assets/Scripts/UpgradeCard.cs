@@ -15,10 +15,6 @@ public class UpgradeCard : MonoBehaviour
     [SerializeField] private List<float> prices = new();
     private int _cardLevel = 1;
 
-    private void Awake()
-    {
-        upgradeName = gameObject.name;
-    }
 
     private void Start()
     {

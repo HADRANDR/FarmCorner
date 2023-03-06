@@ -174,20 +174,17 @@ public class UIController : MonoBehaviour
         {
             chickenPanel.transform.GetChild(0).GetComponent<Button>().interactable = true;
             chickenPanel.transform.GetChild(1).GetComponent<Button>().interactable = true;
-            chickenPanel.transform.GetChild(2).GetComponent<Button>().interactable = true;
         }
         else if (_indexTemp == 1)
         {
             duckPanel.transform.GetChild(0).GetComponent<Button>().interactable = true;
             duckPanel.transform.GetChild(1).GetComponent<Button>().interactable = true;
-            duckPanel.transform.GetChild(2).GetComponent<Button>().interactable = true;
         }
         else if (_indexTemp == 2)
         {
             sheepPanel.transform.GetChild(0).GetComponent<Button>().interactable = true;
             sheepPanel.transform.GetChild(1).GetComponent<Button>().interactable = true;
             sheepPanel.transform.GetChild(2).GetComponent<Button>().interactable = true;
-            sheepPanel.transform.GetChild(3).GetComponent<Button>().interactable = true;
         }            
     }
     void OffInteractableButton()
@@ -196,20 +193,17 @@ public class UIController : MonoBehaviour
         {
             chickenPanel.transform.GetChild(0).GetComponent<Button>().interactable = false;
             chickenPanel.transform.GetChild(1).GetComponent<Button>().interactable = false;
-            chickenPanel.transform.GetChild(2).GetComponent<Button>().interactable = false;
         }
         else if (_indexTemp == 1)
         {
             duckPanel.transform.GetChild(0).GetComponent<Button>().interactable = false;
             duckPanel.transform.GetChild(1).GetComponent<Button>().interactable = false;
-            duckPanel.transform.GetChild(2).GetComponent<Button>().interactable = false;
         }
         else if (_indexTemp == 2)
         {
             sheepPanel.transform.GetChild(0).GetComponent<Button>().interactable = false;
             sheepPanel.transform.GetChild(1).GetComponent<Button>().interactable = false;
             sheepPanel.transform.GetChild(2).GetComponent<Button>().interactable = false;
-            sheepPanel.transform.GetChild(3).GetComponent<Button>().interactable = false;
         }
     }
 }

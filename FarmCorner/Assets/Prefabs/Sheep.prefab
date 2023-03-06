@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3759466573743885396}
   - component: {fileID: 3759466573743885403}
   - component: {fileID: 3759466573743885402}
-  - component: {fileID: 8267734423491048562}
   m_Layer: 0
   m_Name: Sheep3
   m_TagString: Skin1
@@ -98,18 +97,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8267734423491048562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3759466573743885401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66f4c3f650276494eae83841f3668ecf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6818871954613676656
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +109,6 @@ GameObject:
   - component: {fileID: 6818871954613676669}
   - component: {fileID: 6818871954613676658}
   - component: {fileID: 6818871954613676659}
-  - component: {fileID: 2912412636258538363}
   m_Layer: 0
   m_Name: Sheep2
   m_TagString: Skin1
@@ -208,18 +194,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2912412636258538363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6818871954613676656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66f4c3f650276494eae83841f3668ecf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8655347532671246002
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +206,6 @@ GameObject:
   - component: {fileID: 8655347532671246015}
   - component: {fileID: 8655347532671246000}
   - component: {fileID: 8655347532671246001}
-  - component: {fileID: 9048891785501922000}
   m_Layer: 0
   m_Name: Sheep1
   m_TagString: Skin1
@@ -318,18 +291,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &9048891785501922000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8655347532671246002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66f4c3f650276494eae83841f3668ecf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9032816136327997151
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,6 +300,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2719284573820727119}
+  - component: {fileID: 2272616240319339446}
   - component: {fileID: 1764369071516732594}
   - component: {fileID: 3846631910479867090}
   - component: {fileID: 159745968362618782}
@@ -367,6 +329,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2272616240319339446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9032816136327997151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f4c3f650276494eae83841f3668ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sheepManager: {fileID: 1764369071516732594}
+  levelObject:
+  - {fileID: 8655347532671246002}
+  - {fileID: 6818871954613676656}
+  - {fileID: 3759466573743885401}
 --- !u!114 &1764369071516732594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,6 +358,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a500cd23ff0f0944dbfc4074e0d5016c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelVisuals:
+  - {fileID: 8655347532671246002}
+  - {fileID: 6818871954613676656}
+  - {fileID: 3759466573743885401}
+  harvestValues: 
 --- !u!114 &3846631910479867090
 MonoBehaviour:
   m_ObjectHideFlags: 0

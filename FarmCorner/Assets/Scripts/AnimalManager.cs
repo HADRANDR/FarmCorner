@@ -2,11 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
+
 public class AnimalManager : MonoBehaviour
 {
-    
+    [HideInInspector] public UnityEvent OnLevelChanged = new();
+
     private NavMeshAgent _agent;
     public static bool start = true;
+    [SerializeField] private List<GameObject> levelVisuals = new();
+    [SerializeField] private List<int> harvestValues = new();
+
+    private int _level = 1;
+    public int Level 
+    {
+        get 
+        {
+            return _level;
+        }
+        set 
+        {
+            _level = value;
+            SetVisual();
+            OnLevelChanged.Invoke();
+        } 
+    }
 
     void Awake()
     {
@@ -62,6 +82,18 @@ public class AnimalManager : MonoBehaviour
         CancelInvoke(nameof(SetRandomDestination));
         _agent.isStopped = true;
         _agent.enabled = false;
+    }
+    public GameObject GetCurrentAnimalObject()
+    {
+        return levelVisuals[Level - 1];
+    }
+    private void SetVisual()
+    {
+        foreach (var visual in levelVisuals)
+        {
+            visual.SetActive(false);
+        }
+        levelVisuals[Level - 1].SetActive(true);
     }
     private void SetRandomDestinationInvokeRepating()
     {

@@ -4,42 +4,67 @@ using UnityEngine;
 
 public class SheepSkinManager : MonoBehaviour
 {
-    float horizontalF = 0.0005f;
-    float verticalF = 0.00025f;
-    public static int skin = 0;
-    public static Vector3 vectorHorizontalPhase, vectorVerticalPhase;
-    float phaseValue;
-    public static bool phasecontrol = true;
-    float time;
-    void Awake()
+    [SerializeField] private AnimalManager sheepManager;
+
+    public bool GrowComplete { get; set; } = false;
+
+    float horizontalF = 0.004f; // 2 second.
+    float verticalF;
+    Vector3 maxScale = Vector3.one * 1.4f;
+    private GameObject _currentChild;
+    private void Awake()
     {
-        time = 0;
+        verticalF = horizontalF / 2;
     }
-    // Update is called once per frame
+
+    private void OnEnable()
+    {
+        SetVisualObject();
+
+        sheepManager.OnLevelChanged.AddListener(() => 
+        {
+            SetVisualObject();
+            _currentChild.transform.localScale = Vector3.one;
+            _currentChild.transform.localPosition = new Vector3(_currentChild.transform.localPosition.x, 0f, _currentChild.transform.localPosition.z);
+            GrowComplete = false;
+        });
+
+        GameManager.Instance.HarvestWools.AddListener(HarvestWool);
+    }
+    private void OnDisable()
+    {
+        GameManager.Instance.HarvestWools.RemoveListener(HarvestWool);
+    }
+
     void FixedUpdate()  
     {
-        if (gameObject.transform.localScale.x<=1.4f && gameObject.transform.localScale.y <= 1.4f && gameObject.transform.localScale.z <= 1.4f && gameObject.transform.localPosition.y <=0.2f)
+        if (GrowComplete) return;
+        
+        GrowSheepSkin();
+    
+    }
+   
+    private void SetVisualObject()
+    {
+        _currentChild = sheepManager.GetCurrentAnimalObject();
+    }
+
+    private void GrowSheepSkin()
+    {
+        if (_currentChild.transform.localScale.magnitude < maxScale.magnitude && _currentChild.transform.localPosition.y < 0.2f)
         {
-            gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x + horizontalF, gameObject.transform.localScale.y + horizontalF, gameObject.transform.localScale.z + horizontalF);
-            gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y + verticalF, gameObject.transform.localPosition.z);           
-            if (gameObject.transform.localScale.x < 1.2f && gameObject.transform.localScale.y < 1.2f && gameObject.transform.localScale.z < 1.2f && gameObject.transform.localPosition.y < 0.1f)
+            _currentChild.transform.localScale = new Vector3(_currentChild.transform.localScale.x + horizontalF, _currentChild.transform.localScale.y + horizontalF, _currentChild.transform.localScale.z + horizontalF);
+            _currentChild.transform.localPosition = new Vector3(_currentChild.transform.localPosition.x, _currentChild.transform.localPosition.y + verticalF, _currentChild.transform.localPosition.z);
+            if (_currentChild.transform.localScale.magnitude > maxScale.magnitude)
             {
-                gameObject.tag = "Skin1";
-            }
-            else if (gameObject.transform.localScale.x > 1.2f && gameObject.transform.localScale.y > 1.2f && gameObject.transform.localScale.z > 1.2f && gameObject.transform.localPosition.y > 0.1f && gameObject.transform.localScale.x < 1.4f && gameObject.transform.localScale.y < 1.4f && gameObject.transform.localScale.z < 1.4f && gameObject.transform.localPosition.y < 0.2f)
-            {
-                gameObject.tag = "Skin2";
-            }
-            else if (gameObject.transform.localScale.x >= 1.4f && gameObject.transform.localScale.y >= 1.4f && gameObject.transform.localScale.z >= 1.4f && gameObject.transform.localPosition.y >= 0.2f)
-            {
-                gameObject.tag = "Skin3";
+                GrowComplete = true;
             }
         }
     }
-    private void GrowObject()
+   
+    private void HarvestWool()
     {
-        gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x + horizontalF, gameObject.transform.localScale.y + horizontalF, gameObject.transform.localScale.z + horizontalF);
-        gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y + verticalF, gameObject.transform.localPosition.z);
+        _currentChild.transform.localScale = Vector3.one;
+        _currentChild.transform.localPosition = new Vector3(_currentChild.transform.localPosition.x, 0f, _currentChild.transform.localPosition.z);
     }
-
 }

@@ -31,9 +31,11 @@ public class SheepSkinManager : MonoBehaviour
 
         GameManager.Instance.HarvestWools.AddListener(HarvestWool);
     }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Correctness", "UNT0008:Null propagation on Unity objects", Justification = "< bekleyen >")]
     private void OnDisable()
     {
-        GameManager.Instance.HarvestWools.RemoveListener(HarvestWool);
+        GameManager.Instance?.HarvestWools.RemoveListener(HarvestWool);
     }
 
     void FixedUpdate()  

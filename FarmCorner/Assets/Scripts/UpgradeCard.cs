@@ -7,7 +7,8 @@ public class UpgradeCard : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI levelText,priceText;
     [SerializeField] private Button upgradeButton;
-    [SerializeField] private AudioSource btnVoice;
+
+    [SerializeField] FarmManager farmManager;
     
     [Header("Card Properties")]
     [SerializeField] private string upgradeName;
@@ -68,9 +69,6 @@ public class UpgradeCard : MonoBehaviour
         _cardLevel++;
         ItemInitialize();
         SaveData();
-
-        
-        
     }
 
     void LoadData()

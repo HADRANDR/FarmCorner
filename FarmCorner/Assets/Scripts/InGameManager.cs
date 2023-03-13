@@ -7,21 +7,22 @@ public class InGameManager : MonoBehaviour
 {
     #region Variables
     FarmManager farmManager;
+    FarmUpgrade farmUpgrade;
+    [SerializeField] private List<FarmManager> prefabList = new();
     
-    [SerializeField] private List<FarmManager> prefabList = new();      
-
     [Header("Farm Transform Controls")]
     [SerializeField] Vector3 endPointLeft;
     [SerializeField] Vector3 endPointRight;
     [SerializeField] Vector3 centerPoint;
     [SerializeField] float rotationAmount, moveXAmount, moveZAmount, duration, distance; // Rotate Angle // position X point count // position Z point count // animations countdown.
-    [SerializeField] float SheepSkinPhase1, SheepSkinPhase2;
-    public static float _sheepSkinPhase1, _sheepSkinPhase2;
     public static float _staticDuration;
     private Vector2 _startPoint, _endPoint, directionDifX;
     private float _targetRotation, _targetMoveX, _targetMoveZ, _directionDifX;
     private int _count, _tempCount; // List in
     private bool canDrag = true;
+    Camera cam;
+    public bool CanDrag { get; set; }
+    bool canButtonDown;
 
     #endregion
     #region Functions
@@ -31,18 +32,35 @@ public class InGameManager : MonoBehaviour
         _count = 0;
         prefabList[_count].gameObject.transform.position = centerPoint;
         prefabList[_count].gameObject.SetActive(true);
+        cam = Camera.main;
     }
     void Update()
-    {     
-        if (Input.GetMouseButtonDown(0) /*&& EventSystem.current.currentSelectedGameObject != ButtonObjects[_textCount]*/)
+    {
+        if (Input.GetMouseButtonDown(0))
         {
+            //RaycastHit hit;
+            //Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            //if (Physics.Raycast(ray, out hit))
+            //{
+            //    if (hit.collider.gameObject.CompareTag("Button"))
+            //    {
+            //        Debug.Log("UI");
+            //    }
+            //}
+            //if (EventSystem.current.IsPointerOverGameObject())
+            //{
+            //    canButtonDown = true;
+            //}
+            //else canButtonDown = false;
             _startPoint = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
         }
-        if (Input.GetMouseButtonUp(0) /*&& EventSystem.current.currentSelectedGameObject != ButtonObjects[_textCount]*/)
+        
+        if (Input.GetMouseButtonUp(0))
         {
+            //if (canButtonDown) return;
+            Debug.Log("sa");
             _endPoint = Camera.main.ScreenToViewportPoint(new Vector3(Input.mousePosition.x, 0, 0));
             _directionDifX = _startPoint.x - _endPoint.x;
-            //Debug.Log(_startPoint.x + "||||" + _endPoint.x + "||||" + _directionDifX );
             if (!canDrag) return;
             if (_directionDifX <= -0.25f) // screen swiped to the right?
             {
@@ -83,7 +101,7 @@ public class InGameManager : MonoBehaviour
                 prefabList[_count].gameObject.SetActive(true);
                 RotateObjectWithTween(_targetRotation);
                 MoveObjectWithTween(_targetMoveX, _targetMoveZ);
-            }
+            }          
         }
     }   
 
@@ -152,11 +170,14 @@ public class InGameManager : MonoBehaviour
             _count = 0;
         }
     }
-    private IEnumerator CooldownAsync(float time)
-    {       
+    public IEnumerator CooldownAsync(float time)
+    {
+        
+        //farmUpgrade.CanDrag = false;
         canDrag = false;
         yield return new WaitForSeconds(time);
         canDrag = true;
+        //farmUpgrade.CanDrag = true;
     }
     #endregion
 

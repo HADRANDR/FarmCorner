@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7281789223856554554}
-  - component: {fileID: 6842243728942420961}
   - component: {fileID: 930052505295500065}
+  - component: {fileID: 6842243728942420961}
   - component: {fileID: -558342389535530939}
   m_Layer: 0
   m_Name: Duck
@@ -37,18 +37,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6842243728942420961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3891073578925647846}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a500cd23ff0f0944dbfc4074e0d5016c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &930052505295500065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,8 +49,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db11264d326c01847a792db852098d22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pools: 1
+  animalPools: 1
   animalManager: {fileID: 6842243728942420961}
+--- !u!114 &6842243728942420961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3891073578925647846}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a500cd23ff0f0944dbfc4074e0d5016c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnLevelChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  levelVisuals:
+  - {fileID: 6488320370743308382}
+  - {fileID: 8010670739864847808}
+  - {fileID: 9160136873256504808}
+  harvestValues: 
+  IdleTimeMin: 2
+  IdleTimeMax: 4
 --- !u!195 &-558342389535530939
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -73,10 +83,10 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 1
+  m_Acceleration: 2
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 40
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1

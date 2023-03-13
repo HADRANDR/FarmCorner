@@ -7,13 +7,18 @@ using UnityEngine.Events;
 public class AnimalManager : MonoBehaviour
 {
     [HideInInspector] public UnityEvent OnLevelChanged = new();
-
     private NavMeshAgent _agent;
     public static bool start = true;
     [SerializeField] private List<GameObject> levelVisuals = new();
-    [SerializeField] private List<int> harvestValues = new();
-
+    bool waitIdle;
     private int _level = 1;
+    float random;
+    [Header("Animation Times")]
+    [SerializeField] float IdleTimeMin;
+    [SerializeField] float IdleTimeMax;
+    private bool harvestControl;
+
+    public FarmManager farmManager { get; set; }
     public int Level 
     {
         get 
@@ -30,17 +35,29 @@ public class AnimalManager : MonoBehaviour
 
     void Awake()
     {
+        random = Random.Range(IdleTimeMin, IdleTimeMax);
         _agent = GetComponent<NavMeshAgent>();
     }
     private void OnEnable()
     {
+        InvokeRepeating(nameof(HarvestSpawner), farmManager.HarvestTimer, farmManager.HarvestTimer); // this spawn 
+
         if (start==true || FarmManager.canBuy==true)
         {
             StartAnimal();
             start = false;
         }
         else OpenAnimal();
+  
     }
+    void HarvestSpawner()
+    {
+        farmManager.SpawnCount(this.gameObject.transform.position);
+    }
+    //private void OnDisable()
+    //{
+    //    CancelInvoke(nameof(HarvestSpawner));
+    //}
     private void SetRandomDestination()
     {
         _agent.SetDestination(GetRandomPoint());
@@ -51,14 +68,20 @@ public class AnimalManager : MonoBehaviour
             InvokeRepeating(nameof(Check), 0f, 0.01f);
         }
     }
-
     private void Check()
     {
         if (_agent.velocity.magnitude < 0.05f)
         {
             CancelInvoke(nameof(Check));
-            InvokeRepeating(nameof(SetRandomDestination), 0f, 0.01f);
+            StartCoroutine(IdleTiming());
+            
         }
+    }
+    IEnumerator IdleTiming()
+    {
+        yield return new WaitForSeconds(random);
+        InvokeRepeating(nameof(SetRandomDestination), 0f, 0.01f);
+
     }
     private Vector3 GetRandomPoint()
     {
@@ -78,6 +101,7 @@ public class AnimalManager : MonoBehaviour
     }
     public void CloseAnimal()
     {
+        StopAllCoroutines();
         CancelInvoke(nameof(Check));
         CancelInvoke(nameof(SetRandomDestination));
         _agent.isStopped = true;

@@ -18,8 +18,12 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public UnityEvent<AnimalManager> ReturnChickenPool = new();
     [HideInInspector] public UnityEvent<AnimalManager> ReturnDuckPool = new();
     [HideInInspector] public UnityEvent<AnimalManager> ReturnSheepPool = new();
+    [HideInInspector] public UnityEvent<AnimalManager> ReturnCowPool = new();
+    [HideInInspector] public UnityEvent<GameObject> ReturnChickenHarvestPool = new();
+    [HideInInspector] public UnityEvent<GameObject> ReturnDuckHarvestPool = new();
+    [HideInInspector] public UnityEvent<GameObject> ReturnCowHarvestPool = new();
 
-    private float playerMoney;
+    private float playerMoney = 10;
     public float PlayerMoney
     {
         get

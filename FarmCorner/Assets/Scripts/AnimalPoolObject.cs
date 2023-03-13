@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class PoolObject : MonoBehaviour
+public class AnimalPoolObject : MonoBehaviour
 {
-    private enum Pools {ChickenPool = 0, DuckPool = 1, SheepPool = 2 }
-    [SerializeField] private Pools pools;
+    private enum AnimalPools { ChickenPool = 0, DuckPool = 1, SheepPool = 2, CowPool = 3 }
+    [SerializeField] private AnimalPools animalPools;
     [SerializeField] private AnimalManager animalManager;
 
     //[SerializeField] private float returnPoolTime;
@@ -14,7 +14,7 @@ public class PoolObject : MonoBehaviour
 
     private void ReturnHome()
     {
-        switch ((int)pools)
+        switch ((int)animalPools)
         {
             case 0:
                 GameManager.Instance.ReturnChickenPool.Invoke(animalManager);
@@ -25,7 +25,9 @@ public class PoolObject : MonoBehaviour
             case 2:
                 GameManager.Instance.ReturnSheepPool.Invoke(animalManager);
                 break;
+            case 3:
+                GameManager.Instance.ReturnCowPool.Invoke(animalManager);
+                break;
         }
-
     }
 }

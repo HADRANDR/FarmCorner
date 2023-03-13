@@ -12,10 +12,15 @@ public class UIController : MonoBehaviour
     [SerializeField] private List<string> moneyMulti = new();
     [SerializeField] private GameObject coin, money;
 
-    [Header("Upgrade Panels")]
-    [SerializeField] private GameObject chickenPanel;
-    [SerializeField] private GameObject duckPanel;
-    [SerializeField] private GameObject sheepPanel;
+    [Header("Upgrade Panels")]    
+    [SerializeField] private List<Button> chickenPanel = new();
+    [SerializeField] private List<Button> duckPanel = new();
+    [SerializeField] private List<Button> sheepPanel = new();
+    [SerializeField] private List<Button> cowPanel = new();
+    [SerializeField] private GameObject chickenP;
+    [SerializeField] private GameObject duckP;
+    [SerializeField] private GameObject sheepP;
+    [SerializeField] private GameObject cowP;
     //[SerializeField] private GameObject buyButton;
     //[SerializeField] private TextMeshProUGUI buyButtonText;
 
@@ -109,7 +114,6 @@ public class UIController : MonoBehaviour
         GameManager.Instance.LevelSuccess.AddListener(() => ShowPanel(WinPanel, true));
         GameManager.Instance.GameReady.AddListener(GameReady);
         GameManager.Instance.OnMoneyChange.AddListener(SetMoneyText);
-
         GameManager.Instance.OnOpenNewFarm.AddListener(OpenUpgradePanel);
     }
 
@@ -120,16 +124,16 @@ public class UIController : MonoBehaviour
             GameManager.Instance.LevelFail.RemoveListener(() => ShowPanel(LosePanel, true));
             GameManager.Instance.LevelSuccess.RemoveListener(() => ShowPanel(WinPanel, true));
             GameManager.Instance.GameReady.RemoveListener(GameReady);
-
             GameManager.Instance.OnOpenNewFarm.RemoveListener(OpenUpgradePanel);
         }
     }
 
     void CloseAllUpgradePanel()
     {
-        chickenPanel.SetActive(false);
-        duckPanel.SetActive(false);
-        sheepPanel.SetActive(false);
+        chickenP.SetActive(false);
+        duckP.SetActive(false);
+        sheepP.SetActive(false);
+        cowP.SetActive(false);
     }
     int _indexTemp = 0;
     bool firstControl = true;
@@ -137,12 +141,11 @@ public class UIController : MonoBehaviour
     {
         
         CloseAllUpgradePanel();
-
         switch (index)
         {
             case 0:
                 _indexTemp = 0;
-                chickenPanel.SetActive(true);
+                chickenP.SetActive(true);
                 OffInteractableButton();
                 if (firstControl == true)
                 {
@@ -156,13 +159,19 @@ public class UIController : MonoBehaviour
                 break;
             case 1:
                 _indexTemp = 1;
-                duckPanel.SetActive(true);
+                duckP.SetActive(true);
                 OffInteractableButton();
                 Invoke(nameof(OnInteractableButton), InGameManager._staticDuration);
                 break;
             case 2:
                 _indexTemp = 2;
-                sheepPanel.SetActive(true);
+                sheepP.SetActive(true);
+                OffInteractableButton();
+                Invoke(nameof(OnInteractableButton), InGameManager._staticDuration);
+                break;
+            case 3:
+                _indexTemp = 3;
+                cowP.SetActive(true);
                 OffInteractableButton();
                 Invoke(nameof(OnInteractableButton), InGameManager._staticDuration);
                 break;
@@ -170,40 +179,47 @@ public class UIController : MonoBehaviour
     }
     void OnInteractableButton()
     {
-        if (_indexTemp == 0)
+        for (int i = 0; i < chickenPanel.Count; i++)
         {
-            chickenPanel.transform.GetChild(0).GetComponent<Button>().interactable = true;
-            chickenPanel.transform.GetChild(1).GetComponent<Button>().interactable = true;
+            if (_indexTemp == 0)
+            {
+                chickenPanel[i].interactable = true;
+            }
+            else if (_indexTemp == 1)
+            {
+                duckPanel[i].interactable = true;
+            }
+            else if (_indexTemp == 2)
+            {
+                sheepPanel[i].interactable = true;
+            }
+            else if (_indexTemp == 3)
+            {
+                cowPanel[i].interactable = true;
+            }
         }
-        else if (_indexTemp == 1)
-        {
-            duckPanel.transform.GetChild(0).GetComponent<Button>().interactable = true;
-            duckPanel.transform.GetChild(1).GetComponent<Button>().interactable = true;
-        }
-        else if (_indexTemp == 2)
-        {
-            sheepPanel.transform.GetChild(0).GetComponent<Button>().interactable = true;
-            sheepPanel.transform.GetChild(1).GetComponent<Button>().interactable = true;
-            sheepPanel.transform.GetChild(2).GetComponent<Button>().interactable = true;
-        }            
+        
     }
     void OffInteractableButton()
     {
-        if (_indexTemp == 0)
+        for (int i = 0; i < chickenPanel.Count; i++)
         {
-            chickenPanel.transform.GetChild(0).GetComponent<Button>().interactable = false;
-            chickenPanel.transform.GetChild(1).GetComponent<Button>().interactable = false;
-        }
-        else if (_indexTemp == 1)
-        {
-            duckPanel.transform.GetChild(0).GetComponent<Button>().interactable = false;
-            duckPanel.transform.GetChild(1).GetComponent<Button>().interactable = false;
-        }
-        else if (_indexTemp == 2)
-        {
-            sheepPanel.transform.GetChild(0).GetComponent<Button>().interactable = false;
-            sheepPanel.transform.GetChild(1).GetComponent<Button>().interactable = false;
-            sheepPanel.transform.GetChild(2).GetComponent<Button>().interactable = false;
+            if (_indexTemp == 0)
+            {
+                chickenPanel[i].interactable = false;
+            }
+            else if (_indexTemp == 1)
+            {
+                duckPanel[i].interactable = false;
+            }
+            else if (_indexTemp == 2)
+            {
+                sheepPanel[i].interactable = false;
+            }
+            else if (_indexTemp == 3)
+            {
+                cowPanel[i].interactable = false;
+            }
         }
     }
 }
